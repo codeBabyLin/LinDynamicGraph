@@ -18,6 +18,11 @@ public class EntityVersionStore {
         this.entityIdCStore = new KeyValueStore(new File(dir,"IdCreate").getAbsolutePath());
         this.entityIdDStore = new KeyValueStore(new File(dir,"IdDelte").getAbsolutePath());
     }
+    public EntityVersionStore(String dir,Transformer transformer){
+        this.transformer = transformer;
+        this.entityIdCStore = new KeyValueStore(new File(dir,"IdCreate").getAbsolutePath());
+        this.entityIdDStore = new KeyValueStore(new File(dir,"IdDelte").getAbsolutePath());
+    }
     public boolean existEntity(long entityId){
         return this.entityIdCStore.exist(transformer.LongToByte(entityId));
     }
@@ -35,7 +40,7 @@ public class EntityVersionStore {
         byte[]dValue = transformer.LongToByte(version);
         this.entityIdDStore.add(key,dValue);
     }
-    public void deleteNode(byte[]key,long version){
+    public void deleteEntity(byte[]key,long version){
         //byte[]key = transformer.LongToByte(node);
         byte[]dValue = transformer.LongToByte(version);
         this.entityIdDStore.add(key,dValue);

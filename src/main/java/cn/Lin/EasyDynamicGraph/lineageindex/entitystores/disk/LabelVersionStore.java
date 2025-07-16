@@ -3,6 +3,7 @@ package cn.Lin.EasyDynamicGraph.lineageindex.entitystores.disk;
 
 import cn.Lin.EasyDynamicGraph.graphdb.persistent.KeyValueStore;
 import cn.Lin.EasyDynamicGraph.graphdb.persistent.Transformer;
+import io.netty.buffer.ByteBuf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +48,35 @@ public class LabelVersionStore {
         lableName.toArray(res);
         return res;
     }
+    public String[] getLabelsBytime(long id,long timeStamp){
+
+        byte[] prefix = transformer.LongToByte(id);
+
+        ArrayList<String>  lableName = new ArrayList<>();
+
+        Iterator<byte[]> iter = this.labelVersionStore.allWithPrefix(prefix);
+        while(iter.hasNext()){
+            byte[]key = iter.next();
+            ByteBuf byteBuf = transformer.getByteBuf(key);
+            long nodeId = byteBuf.readLong();
+            long startTime = byteBuf.readLong();
+            long endTime = byteBuf.readLong();
+            byte[] value =this.labelVersionStore.get(key);
+            String str = transformer.ByteToString(value);
+            if(startTime<= timeStamp && timeStamp<=endTime) {
+                lableName.add(str);
+            }
+
+        }
+
+        String [] res = new String[lableName.size()];
+        lableName.toArray(res);
+        return res;
+    }
+
+
+
+
     public int size(){
         return this.labelVersionStore.all2().size();
     }

@@ -38,6 +38,7 @@ public class InMemoryRelationship implements InMemoryEntity {
 
     private static final String ERROR_MSG = "Unsupported operation.";
 
+
     public InMemoryRelationship(long relId, long startNode, long endNode, int type, long timestamp) {
         this(relId, startNode, endNode, type, timestamp, false, false);
     }
@@ -240,8 +241,14 @@ public class InMemoryRelationship implements InMemoryEntity {
         this.relId = entityId;
     }
 
+    public void setStartNode(long startNode) {
+        this.startNode = startNode;
+    }
     public void setEndNode(long endNode) {
         this.endNode = endNode;
+    }
+    public void setType(int type) {
+        this.type = type;
     }
 
     public void setStartTimestamp(long timestamp) {
